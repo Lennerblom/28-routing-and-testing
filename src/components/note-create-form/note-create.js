@@ -1,35 +1,52 @@
-'use strict';
 import React, {Component, Fragment} from 'react';
-import Dash from '../dashboard/dashboard';
+import uuid from 'uuid/v1';
 
 export default class NoteForm extends Component {
-  constructor(props) {
+    constructor(props) {
     super(props);
-  }
+    this.state = {
+      editing: false,
+      completed: false,
+      content: "",
+      title: ""
+  };
+    }
+   onSubmit = event => {
+    event.preventDefault();
+    this.props.onSubmit({...this.state, id: uuid() });
+  };
 
-  handleNote(e) {
-      let content = e.target.value;
-      console.log(content);
-  }
+  onChange = event => {
+    const val =
+      event.target.type === "checkbox"
+        ? event.target.checked
+        : event.target.value;
 
-  onComplete(e) {
-      e.preventDefault();
-      let content = e.target.value;
-      console.log(content);
-      this.props.setContent(content);
-      Dash.addNote();
-  }
-
+    const changedBit = {
+      [event.target.name]: val
+    };
+    this.setState(changedBit);
+    console.log('Here', this.state);
+  };
+ 
   render() {
       return(
         <Fragment>
-            <form>
-                <label>Create Note</label>
-                <input type="textArea" onChange={this.handleNote} onSubmit={this.onComplete}/>
-            </form>
+            <form onSubmit={this.onSubmit} onChange={this.onChange}>
+        <input name="title" placeholder="title" value = {this.state.title}/>
+        <textarea name="content" placeholder="content" value = {this.state.content}/>
+        <label>
+          <span>editing</span>
+          <input name="editing" type="checkbox" value = {this.state.editing}/>
+        </label>
+        <label>
+          <span>completed</span>
+          <input name="completed" type="checkbox" value = {this.state.completed}/>
+        </label>
+        <button>Create Note</button>
+      </form>
         </Fragment>
-      )
+      );
   }
 }
 
-// onComplete the NoteForm should add a note to the application state

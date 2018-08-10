@@ -1,7 +1,6 @@
-'use strict';
 import React, {Component, Fragment} from 'react';
-import uuid from 'uuid/v1';
 import NoteForm from '../note-create-form/note-create';
+import NoteList from '../note-list/note-list';
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -10,45 +9,37 @@ export default class Dashboard extends Component {
 
     };
     this.addNote = this.addNote.bind(this);
-    //this.removeNote = this.removeNote.bind(this);
+    this.removeNote = this.removeNote.bind(this);
     console.log("__State__", this.state);
 
   }
- 
-//   componentDidMount() {
-//     this.addNote()
-//       .then(data => 
-//         this.setState( Object.assign(...this.state, data) ) 
-//     );
-// }
-  addNote(content) {
-    console.log('hello??')
-    let note = {};
-    note = {
-      id: uuid(),
-      editing: false,
-      content: content,
-      title: '',
-    };
-    this.setState({notes: note});
-   //this.setState( Object.assign(this.state.notes,note));
+  //THIS WORKS TOO
+  // addNote = note => {
+  //   let notes = [...this.state.notes, note];
+  //   this.setState({notes});
+  // };
+
+  addNote(note) {
+    this.setState({
+      notes: [...this.state.notes, note]
+    });
     console.log("__State__", this.state);
   }
 
-  // removeNote(note) {
-  //   //note comes from note-item
-  //   this.setState("remove the note");
-  // }
+  removeNote(id) {
+        const notes = this.state.notes.filter(note => note.id !== id);
+        this.setState({ notes });
+      }
 
   render() {
     return(
       <Fragment>
-        <main>
-          <h2>dash</h2>
-          <NoteForm setContent={this.addNote}/>
-        </main>
+
+          <NoteForm onSubmit={this.addNote}/>
+          <NoteList notes={this.state.notes} onRemove={this.removeNote}/>
+     
       </Fragment>
-    )
+    );
   }
 
 }

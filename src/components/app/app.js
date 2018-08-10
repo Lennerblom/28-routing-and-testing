@@ -2,15 +2,9 @@
 import React, {Component, Fragment} from 'react';
 import {BrowserRouter, NavLink, Route} from 'react-router-dom';
 import Landing from '../landing/landing';
-import Dashboard from '../dashboard/dashboard'
+import Dashboard from '../dashboard/dashboard';
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stuff: '',
-    };
-  }
 
   render() {
     return (
